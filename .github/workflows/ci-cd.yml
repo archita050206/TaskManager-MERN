@@ -38,41 +38,9 @@ jobs:
           cd backend
           npm test
 
-  docker-build-push:
-
-    needs: test
-
-    runs-on: ubuntu-latest
-
-    steps:
-
-      - uses: actions/checkout@v4
-
-      - name: Login Docker Hub
-        uses: docker/login-action@v4
-        with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
-
-      - name: Build Backend Image
-        run: |
-          docker build -t ${{ secrets.DOCKER_USERNAME }}/mern-backend ./backend
-
-      - name: Push Backend Image
-        run: |
-          docker push ${{ secrets.DOCKER_USERNAME }}/mern-backend
-
-      - name: Build Frontend Image
-        run: |
-          docker build -t ${{ secrets.DOCKER_USERNAME }}/mern-frontend ./frontend
-
-      - name: Push Frontend Image
-        run: |
-          docker push ${{ secrets.DOCKER_USERNAME }}/mern-frontend
-  
   deploy:
 
-    needs: docker-build-push
+    needs: test
 
     runs-on: ubuntu-latest
 
@@ -86,8 +54,10 @@ jobs:
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
 
-            docker pull username/mern-backend
-            docker pull username/mern-frontend
+            cd TaskManager-MERN
+
+            git pull origin main
 
             docker compose down
-            docker compose up -d
+
+            docker compose up -d --build

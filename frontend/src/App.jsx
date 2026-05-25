@@ -3,6 +3,8 @@ import axios from "axios";
 import TaskForm from "./components/TaskForm";
 import TaskList from "./components/TaskList";
 
+const API_BASE_URL = import.meta.env.VITE_API_URL || `http://${window.location.hostname}:5001/api/tasks`;
+
 export default function App() {
 
     const [tasks, setTasks] = useState([]);
@@ -15,7 +17,7 @@ export default function App() {
 
     const fetchTasks = async() => {
 
-        const res = await axios.get("http://localhost:5001/api/tasks");
+        const res = await axios.get(API_BASE_URL);
 
         setTasks(res.data);
     };
@@ -27,7 +29,7 @@ export default function App() {
     const addTask = async() => {
 
         await axios.post(
-            "http://localhost:5001/api/tasks",
+            API_BASE_URL,
             form
         );
 
@@ -43,7 +45,7 @@ export default function App() {
     const deleteTask = async(id) => {
 
         await axios.delete(
-            `http://localhost:5001/api/tasks/${id}`
+            `${API_BASE_URL}/${id}`
         );
 
         fetchTasks();
