@@ -56,11 +56,11 @@ jobs:
 
       - name: Build Backend Image
         run: |
-          docker build -t yourdockerhubusername/taskmanager-backend:latest ./backend
+          docker build -t darchita06/taskmanager-backend:latest ./backend
 
       - name: Push Backend Image
         run: |
-          docker push yourdockerhubusername/taskmanager-backend:latest
+          docker push darchita06/taskmanager-backend:latest
 
   deploy:
 
@@ -84,6 +84,6 @@ jobs:
 
             docker compose down
 
-            docker pull yourdockerhubusername/taskmanager-backend:latest
+            docker pull darchita06/taskmanager-backend:latest
 
             docker compose up -d
